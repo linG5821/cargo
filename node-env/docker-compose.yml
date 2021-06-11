@@ -1,5 +1,10 @@
 version: "3.0"
 
+
+networks: 
+  one_full_net:
+    external: true
+
 services:
   node:
     build: 
@@ -11,3 +16,5 @@ services:
     ports:
       - 8080:8080
       - 9528:9528
+    networks:
+      - one_full_net

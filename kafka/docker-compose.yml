@@ -1,8 +1,8 @@
 version: '3.7'
 
 networks:
-  kafka_net:
-    driver: bridge
+  one_full_net:
+    external: true
 
 services:
   zookeeper:
@@ -13,7 +13,7 @@ services:
       - "2181:2181"
     restart: always
     networks: 
-      - kafka_net
+      - one_full_net
   kafka1:
     image: wurstmeister/kafka
     depends_on:
@@ -34,7 +34,7 @@ services:
       JMX_PORT: 9999
     restart: always
     networks: 
-      - kafka_net
+      - one_full_net
   kafka2:
     image: wurstmeister/kafka
     depends_on:
@@ -55,7 +55,7 @@ services:
       JMX_PORT: 9999
     restart: always
     networks:
-      - kafka_net
+      - one_full_net
   kafka3:
     image: wurstmeister/kafka
     depends_on:
@@ -76,7 +76,7 @@ services:
       JMX_PORT: 9999
     restart: always
     networks:
-      - kafka_net
+      - one_full_net
 
   kafka-manager: 
     image: kafkamanager/kafka-manager
@@ -91,4 +91,4 @@ services:
       - kafka3
     restart: always
     networks: 
-      - kafka_net
+      - one_full_net

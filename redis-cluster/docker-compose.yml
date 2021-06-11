@@ -1,0 +1,53 @@
+version: '3.8'
+
+
+networks: 
+  one_full_net:
+    external: true
+
+services:
+  redis6380:
+    image: 'redis'
+    container_name: redis6380
+    command:
+      ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    volumes:
+      - ./6380/redis.conf:/usr/local/etc/redis/redis.conf
+      - ../data/redis-cluster/6380/data:/data
+    ports:
+      - "6380:6380"
+      - "16380:16380"
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - one_full_net
+  redis6381:
+    image: 'redis'
+    container_name: redis6381
+    command:
+      ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    volumes:
+      - ./6381/redis.conf:/usr/local/etc/redis/redis.conf
+      - ../data/redis-cluster/6381/data:/data
+    ports:
+      - "6381:6381"
+      - "16381:16381"
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - one_full_net
+  redis6382:
+    image: 'redis'
+    container_name: redis6382
+    command:
+      ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    volumes:
+      - ./6382/redis.conf:/usr/local/etc/redis/redis.conf
+      - ../data/redis-cluster/6382/data:/data
+    ports:
+      - "6382:6382"
+      - "16382:16382"
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - one_full_net

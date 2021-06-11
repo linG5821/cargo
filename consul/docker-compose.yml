@@ -1,0 +1,22 @@
+version: '3.8'
+
+networks: 
+  one_full_net:
+    external: true
+
+services:
+  consul0: 
+    image: consul:1.8
+    networks: 
+      - one_full_net
+    command: agent -server -client=0.0.0.0 -bind='{{ GetInterfaceIP "eth0" }}' -bootstrap-expect=1 -node=consul0 -datacenter=dc1
+
+  client0:
+    image: consul:1.8
+    ports: 
+      - 8500:8500
+    networks: 
+      - one_full_net
+    command: agent -client=0.0.0.0 -bind='{{ GetInterfaceIP "eth0" }}' -retry-join=consul0 -node=client0 -ui -datacenter=dc1
+    depends_on: 
+      - consul0

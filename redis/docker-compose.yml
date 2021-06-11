@@ -1,0 +1,22 @@
+version: '3.8'
+
+
+networks: 
+  one_full_net:
+    external: true
+
+services:
+  redis:
+    image: redis
+    container_name: redis
+    command:
+      ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+      - ../data/redis/data:/data
+    ports:
+      - "6379:6379"
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - one_full_net
