@@ -1,0 +1,28 @@
+version: '3.7'
+ 
+networks:
+  one_full_net:
+    external: true
+ 
+services:
+  tdengine:
+    image: tdengine/tdengine
+    container_name: tdengine
+    hostname: tdengine
+    cap_add:
+      - ALL
+    ports:
+      - "6030:6030"
+      - "6035:6035"
+      - "6041:6041"
+      - "6030-6040:6030-6040/udp"
+    volumes:
+      - ./cfg/taos.cfg:/etc/taos/taos.cfg
+      - ../data/tdengine/log:/var/log/taos
+      - ../data/tdengine/data:/var/lib/taos
+    environment:
+      TZ: Asia/Shanghai
+    networks:
+      - one_full_net
+    restart: always
+

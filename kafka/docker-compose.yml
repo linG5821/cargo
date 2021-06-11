@@ -1,0 +1,94 @@
+version: '3.7'
+
+networks:
+  kafka_net:
+    driver: bridge
+
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    volumes:
+       - ../data/zookeeper/data:/data
+    ports:
+      - "2181:2181"
+    restart: always
+    networks: 
+      - kafka_net
+  kafka1:
+    image: wurstmeister/kafka
+    depends_on:
+      - zookeeper
+    ports: 
+      - "19002:19002"
+    volumes:
+      - ../data/kafka/node_1/data:/kafka
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ADVERTISED_HOST_NAME: kafka1
+      KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:19002
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka1:9092,OUTSIDE://192.168.3.158:19002
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      JMX_PORT: 9999
+    restart: always
+    networks: 
+      - kafka_net
+  kafka2:
+    image: wurstmeister/kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "19003:19003"
+    volumes:
+      - ../data/kafka/node_2/data:/kafka
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ADVERTISED_HOST_NAME: kafka2
+      KAFKA_LISTENERS: INSIDE://:9093,OUTSIDE://:19003
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka2:9093,OUTSIDE://192.168.3.158:19003
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      JMX_PORT: 9999
+    restart: always
+    networks:
+      - kafka_net
+  kafka3:
+    image: wurstmeister/kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "19004:19004"
+    volumes:
+      - ../data/kafka/node_3/data:/kafka
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ADVERTISED_HOST_NAME: kafka3
+      KAFKA_LISTENERS: INSIDE://:9094,OUTSIDE://:19004
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka3:9094,OUTSIDE://192.168.3.158:19004
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      JMX_PORT: 9999
+    restart: always
+    networks:
+      - kafka_net
+
+  kafka-manager: 
+    image: kafkamanager/kafka-manager
+    ports:
+      - 9000:9000
+    environment:
+      ZK_HOSTS: "zookeeper:2181"  
+    depends_on:
+      - zookeeper
+      - kafka1
+      - kafka2
+      - kafka3
+    restart: always
+    networks: 
+      - kafka_net
