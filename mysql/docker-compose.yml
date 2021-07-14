@@ -10,12 +10,14 @@ services:
     image: mysql:8
     container_name: mysql
     restart: always
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default-authentication-plugin=mysql_native_password
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     environment:
     - TZ=Asia/Shanghai
     - MYSQL_ROOT_PASSWORD=123456
     volumes:
-        - ../data/mysql/data:/var/lib/mysql/data
+        - ../data/mysql/data:/var/lib/mysql
         - ./my.cnf:/etc/mysql/my.cnf
     ports:
         - "3306:3306"
+    networks:
+      - one_full_net
