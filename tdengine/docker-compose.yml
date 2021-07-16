@@ -15,6 +15,7 @@ services:
       - "6030:6030"
       - "6035:6035"
       - "6041:6041"
+      # 外部连接不仅要放通TCP,还要放通UDP
       - "6030-6040:6030-6040/udp"
     volumes:
       - ./cfg/taos.cfg:/etc/taos/taos.cfg
