@@ -1,19 +1,13 @@
 version: '3.7'
 
-networks:
-  one_full_net:
-    external: true
-
 services:
   zookeeper:
     image: wurstmeister/zookeeper
     volumes:
-       - ../data/zookeeper/data:/data
+       - ./data/zookeeper/data:/data
     ports:
       - "2181:2181"
     restart: always
-    networks: 
-      - one_full_net
   kafka1:
     image: wurstmeister/kafka
     depends_on:
@@ -21,7 +15,7 @@ services:
     ports: 
       - "9092:9092"
     volumes:
-      - ../data/kafka/node_1/data:/kafka
+      - ./data/kafka/node_1/data:/kafka
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_LISTENERS: INSIDE://:19092,OUTSIDE://:9092
@@ -32,8 +26,6 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       JMX_PORT: 9999
     restart: always
-    networks: 
-      - one_full_net
   kafka2:
     image: wurstmeister/kafka
     depends_on:
@@ -41,7 +33,7 @@ services:
     ports:
       - "9093:9093"
     volumes:
-      - ../data/kafka/node_2/data:/kafka
+      - ./data/kafka/node_2/data:/kafka
     environment:
       KAFKA_BROKER_ID: 2
       KAFKA_LISTENERS: INSIDE://:19093,OUTSIDE://:9093
@@ -52,8 +44,6 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       JMX_PORT: 9999
     restart: always
-    networks:
-      - one_full_net
   kafka3:
     image: wurstmeister/kafka
     depends_on:
@@ -61,7 +51,7 @@ services:
     ports:
       - "9094:9094"
     volumes:
-      - ../data/kafka/node_3/data:/kafka
+      - ./data/kafka/node_3/data:/kafka
     environment:
       KAFKA_BROKER_ID: 3
       KAFKA_LISTENERS: INSIDE://:19094,OUTSIDE://:9094
@@ -72,8 +62,6 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       JMX_PORT: 9999
     restart: always
-    networks:
-      - one_full_net
 
   kafka-manager: 
     image: kafkamanager/kafka-manager
@@ -87,5 +75,3 @@ services:
       - kafka2
       - kafka3
     restart: always
-    networks: 
-      - one_full_net
