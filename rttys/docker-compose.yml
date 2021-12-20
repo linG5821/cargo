@@ -1,0 +1,12 @@
+version: "3.0"
+
+services:
+  rttys:
+    image: ling5821/rttys
+    container_name: rttys
+    restart: always
+    volumes:
+        - ./rttys.conf:/rttys/rttys.conf
+    ports:
+        - "5912:5912"
+        - "5913:5913"
