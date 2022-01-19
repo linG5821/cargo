@@ -1,29 +1,21 @@
 version: '3.7'
  
-networks:
-  one_full_net:
-    external: true
- 
 services:
   tdengine:
-    image: tdengine/tdengine
+    image: tdengine/tdengine:2.4.0.3
     container_name: tdengine
     hostname: tdengine
     cap_add:
       - ALL
     ports:
-      - "6030:6030"
-      - "6035:6035"
-      - "6041:6041"
+      - "6030-6041:6030-6041"
       # 外部连接不仅要放通TCP,还要放通UDP
-      - "6030-6040:6030-6040/udp"
+      - "6030-6041:6030-6041/udp"
     volumes:
       - ./cfg/taos.cfg:/etc/taos/taos.cfg
-      - ../data/tdengine/log:/var/log/taos
-      - ../data/tdengine/data:/var/lib/taos
+      - ./data/tdengine/log:/var/log/taos
+      - ./data/tdengine/data:/var/lib/taos
     environment:
       TZ: Asia/Shanghai
-    networks:
-      - one_full_net
     restart: always
 
