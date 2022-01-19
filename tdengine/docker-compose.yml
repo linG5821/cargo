@@ -1,5 +1,5 @@
 version: '3.7'
- 
+
 services:
   tdengine:
     image: tdengine/tdengine:2.4.0.3
@@ -8,9 +8,9 @@ services:
     cap_add:
       - ALL
     ports:
-      - "6030-6041:6030-6041"
+      - "6030-6042:6030-6042"
       # 外部连接不仅要放通TCP,还要放通UDP
-      - "6030-6041:6030-6041/udp"
+      - "6030-6042:6030-6042/udp"
     volumes:
       - ./cfg/taos.cfg:/etc/taos/taos.cfg
       - ./data/tdengine/log:/var/log/taos
@@ -18,4 +18,3 @@ services:
     environment:
       TZ: Asia/Shanghai
     restart: always
-
