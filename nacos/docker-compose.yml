@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+  nacos:
+    image: nacos/nacos-server:${NACOS_VERSION}
+    container_name: nacos
+    environment:
+      - PREFER_HOST_MODE=hostname
+      - MODE=standalone
+      - SPRING_DATASOURCE_PLATFORM=mysql
+      - MYSQL_SERVICE_HOST=${MYSQL_SERVICE_HOST}
+      - MYSQL_SERVICE_DB_NAME=${MYSQL_SERVICE_DB_NAME}
+      - MYSQL_SERVICE_PORT=${MYSQL_SERVICE_PORT}
+      - MYSQL_SERVICE_USER=${MYSQL_SERVICE_USER}
+      - MYSQL_SERVICE_PASSWORD=${MYSQL_SERVICE_PASSWORD}
+      - MYSQL_SERVICE_DB_PARAM=characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useSSL=false
+    volumes:
+      - ./data/logs/:/home/nacos/logs
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+    depends_on:
+      - mysql
+    restart: always
+  # mysql:
+  #   container_name: mysql
+  #   image: nacos/nacos-mysql:5.7
+  #   environment:
+  #     - MYSQL_ROOT_PASSWORD=root
+  #     - MYSQL_DATABASE=${MYSQL_SERVICE_DB_NAME}
+  #     - MYSQL_USER=${MYSQL_SERVICE_USER}
+  #     - MYSQL_PASSWORD=${MYSQL_SERVICE_PASSWORD}
+  #   volumes:
+  #     - ./data/mysql:/var/lib/mysql
+  #     - ./initdb:/docker-entrypoint-initdb.d
+  #   security_opt:
+  #     - seccomp:unconfined
+  #   ports:
+  #     - "3306:3306"
+  ## mysql8
+  mysql:
+    container_name: mysql
+    image: nacos/nacos-mysql:8.0.16
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=${MYSQL_SERVICE_DB_NAME}
+      - MYSQL_USER=${MYSQL_SERVICE_USER}
+      - MYSQL_PASSWORD=${MYSQL_SERVICE_PASSWORD}
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+      - ./initdb:/docker-entrypoint-initdb.d
+    security_opt:
+      - seccomp:unconfined
+    ports:
+      - "3306:3306"

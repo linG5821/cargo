@@ -1,0 +1,83 @@
+version: "3.8"
+
+services:
+  nacos1:
+    hostname: nacos1
+    container_name: nacos1
+    image: nacos/nacos-server:${NACOS_VERSION}
+    volumes:
+      - ./data/logs/nacos1:/home/nacos/logs
+    environment:
+      - PREFER_HOST_MODE=hostname
+      - NACOS_SERVERS=nacos1:8848 nacos2:8848 nacos3:8848
+      - MYSQL_SERVICE_HOST=${MYSQL_SERVICE_HOST}
+      - MYSQL_SERVICE_DB_NAME=${MYSQL_SERVICE_DB_NAME}
+      - MYSQL_SERVICE_PORT=${MYSQL_SERVICE_PORT}
+      - MYSQL_SERVICE_USER=${MYSQL_SERVICE_USER}
+      - MYSQL_SERVICE_PASSWORD=${MYSQL_SERVICE_PASSWORD}
+      - MYSQL_SERVICE_DB_PARAM=characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useSSL=false
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+    restart: always
+    depends_on:
+      - mysql
+
+  nacos2:
+    hostname: nacos2
+    image: nacos/nacos-server:${NACOS_VERSION}
+    container_name: nacos2
+    volumes:
+      - ./data/logs/nacos2:/home/nacos/logs
+    environment:
+      - PREFER_HOST_MODE=hostname
+      - NACOS_SERVERS=nacos1:8848 nacos2:8848 nacos3:8848
+      - MYSQL_SERVICE_HOST=${MYSQL_SERVICE_HOST}
+      - MYSQL_SERVICE_DB_NAME=${MYSQL_SERVICE_DB_NAME}
+      - MYSQL_SERVICE_PORT=${MYSQL_SERVICE_PORT}
+      - MYSQL_SERVICE_USER=${MYSQL_SERVICE_USER}
+      - MYSQL_SERVICE_PASSWORD=${MYSQL_SERVICE_PASSWORD}
+      - MYSQL_SERVICE_DB_PARAM=characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useSSL=false
+    ports:
+      - "8849:8848"
+      - "9849:9848"
+    restart: always
+    depends_on:
+      - mysql
+  nacos3:
+    hostname: nacos3
+    image: nacos/nacos-server:${NACOS_VERSION}
+    container_name: nacos3
+    volumes:
+      - ./data/logs/nacos3:/home/nacos/logs
+    environment:
+      - PREFER_HOST_MODE=hostname
+      - NACOS_SERVERS=nacos1:8848 nacos2:8848 nacos3:8848
+      - MYSQL_SERVICE_HOST=${MYSQL_SERVICE_HOST}
+      - MYSQL_SERVICE_DB_NAME=${MYSQL_SERVICE_DB_NAME}
+      - MYSQL_SERVICE_PORT=${MYSQL_SERVICE_PORT}
+      - MYSQL_SERVICE_USER=${MYSQL_SERVICE_USER}
+      - MYSQL_SERVICE_PASSWORD=${MYSQL_SERVICE_PASSWORD}
+      - MYSQL_SERVICE_DB_PARAM=characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useSSL=false
+    ports:
+      - "8850:8848"
+      - "9850:9848"
+    restart: always
+    depends_on:
+      - mysql
+  ## mysql8
+  mysql:
+    container_name: mysql
+    image: nacos/nacos-mysql:8.0.16
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=${MYSQL_SERVICE_DB_NAME}
+      - MYSQL_USER=${MYSQL_SERVICE_USER}
+      - MYSQL_PASSWORD=${MYSQL_SERVICE_PASSWORD}
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+      - ./initdb:/docker-entrypoint-initdb.d
+    security_opt:
+        - seccomp:unconfined
+    ports:
+      - "3306:3306"
