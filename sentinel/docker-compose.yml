@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  sentinel-dashboard:
+    build:
+      context: ./
+      args:
+        - SENTINEL_DASHBOARD_VERSION=${SENTINEL_DASHBOARD_VERSION}
+    container_name: sentinel-dashboard
+    restart: always
+    ports:
+      - "8858:8858"
+      - "8719:8719"
+    environment:
+      - TZ=Asia/Shanghai
