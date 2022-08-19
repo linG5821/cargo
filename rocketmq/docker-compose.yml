@@ -26,10 +26,15 @@ services:
     environment:
       - NAMESRV_ADDR=namesrv:9876
       - BROKER_IP1=${ROCKETMQ_BROKER_IP1}
+      - BROKER_LISTEN_PORT=10911
+      - BROKER_NAME=rocketmq-broker-1
+      - BROKER_ID=0
+      - BROKER_ROLE=ASYNC_MASTER
+      - BROKER_CLUSTER_NAME=${BROKER_CLUSTER_NAME}
     volumes:
       - ./data/broker1/logs:/home/rocketmq/logs
       - ./data/broker1/store:/home/rocketmq/store
-      - ./data/broker1/conf/broker.conf:/opt/rocketmq-${ROCKETMQ_VERSION}/conf/broker.conf
+      - ./broker.conf:/opt/rocketmq-${ROCKETMQ_VERSION}/conf/default.conf
       - ./start-broker.sh:/home/rocketmq/rocketmq-${ROCKETMQ_VERSION}/bin/start-broker.sh
     command: sh start-broker.sh
 
@@ -41,17 +46,22 @@ services:
     restart: always
     ports:
       - 10929:10909
-      - 10931:10911
+      - 10931:10931
       - 10932:10912
     depends_on:
       - namesrv
     environment:
       - NAMESRV_ADDR=namesrv:9876
       - BROKER_IP1=${ROCKETMQ_BROKER_IP1}
+      - BROKER_LISTEN_PORT=10931
+      - BROKER_NAME=rocketmq-broker-2
+      - BROKER_ID=0
+      - BROKER_ROLE=ASYNC_MASTER
+      - BROKER_CLUSTER_NAME=${BROKER_CLUSTER_NAME}
     volumes:
       - ./data/broker2/logs:/home/rocketmq/logs
       - ./data/broker2/store:/home/rocketmq/store
-      - ./data/broker2/conf/broker.conf:/opt/rocketmq-${ROCKETMQ_VERSION}/conf/broker.conf
+      - ./broker.conf:/opt/rocketmq-${ROCKETMQ_VERSION}/conf/default.conf
       - ./start-broker.sh:/home/rocketmq/rocketmq-${ROCKETMQ_VERSION}/bin/start-broker.sh
     command: sh start-broker.sh
   dashboard:
