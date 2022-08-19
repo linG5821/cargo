@@ -5,6 +5,7 @@ services:
     ## 请注意构建镜像的镜像名(apacherocketmq/rocketmq)与使用dockerhub的不同 
     image: apache/rocketmq:${ROCKETMQ_VERSION}
     container_name: rocketmq-namesrv
+    restart: always
     ports:
       - 9876:9876
     volumes:
@@ -15,6 +16,7 @@ services:
   broker1:
     image: apache/rocketmq:${ROCKETMQ_VERSION}
     container_name: rocketmq-broker-1
+    restart: always
     ports:
       - 10909:10909
       - 10911:10911
@@ -36,6 +38,7 @@ services:
   broker2:
     image: apache/rocketmq:${ROCKETMQ_VERSION}
     container_name: rocketmq-broker-2
+    restart: always
     ports:
       - 10929:10909
       - 10931:10911
