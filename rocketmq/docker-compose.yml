@@ -45,14 +45,15 @@ services:
     container_name: rocketmq-broker-2
     restart: always
     ports:
-      - 10929:10909
+      - 10929:10929
       - 10931:10931
-      - 10932:10912
+      - 10932:10932
     depends_on:
       - namesrv
     environment:
       - NAMESRV_ADDR=namesrv:9876
       - BROKER_IP1=${ROCKETMQ_BROKER_IP1}
+      # 修改此端口后对应的 fastListenPort(用于 slave 和 master 同步 listenPort - 2), haListenPort(listenPort + 1)
       - BROKER_LISTEN_PORT=10931
       - BROKER_NAME=rocketmq-broker-2
       - BROKER_ID=0
