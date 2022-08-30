@@ -1,77 +1,88 @@
-version: '3.7'
+version: '3'
 
 services:
   zookeeper:
-    image: wurstmeister/zookeeper
+    image: 'bitnami/zookeeper:${ZOOKEEPER_VERSION}'
     volumes:
-       - ./data/zookeeper/data:/data
+      - ./data/zookeeper/data:/bitnami/zookeeper
     ports:
       - "2181:2181"
     restart: always
+    environment: 
+      ZOO_ENABLE_AUTH: yes
+      ZOO_SERVER_USERS: ${ZOOKEEPER_USER}
+      ZOO_SERVER_PASSWORDS: ${ZOOKEEPER_PASSWORD}
+      ZOO_CLIENT_USER: ${ZOOKEEPER_USER}
+      ZOO_CLIENT_PASSWORD: ${ZOOKEEPER_PASSWORD}
   kafka1:
-    image: wurstmeister/kafka
+    image: 'bitnami/kafka:${KAFKA_VERSION}'
+    ports:
+      - "9092:9092"
+      - "9992:9992"
+    restart: always
+    volumes:
+      - ./data/kafka/node_1/data:/bitnami/kafka
     depends_on:
       - zookeeper
-    ports: 
-      - "9092:9092"
-    volumes:
-      - ./data/kafka/node_1/data:/kafka
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_LISTENERS: INSIDE://:19092,OUTSIDE://:9092
-      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka1:19092,OUTSIDE://${KAFKA_HOSTNAME}:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      JMX_PORT: 9999
-    restart: always
+      KAFKA_CFG_LISTENERS: INSIDE://:19092,OUTSIDE://:9092
+      KAFKA_CFG_ADVERTISED_LISTENERS: INSIDE://kafka1:19092,OUTSIDE://${KAFKA_HOSTNAME}:9092
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INSIDE
+      ALLOW_PLAINTEXT_LISTENER: yes
+      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ZOOKEEPER_PROTOCOL: SASL
+      KAFKA_ZOOKEEPER_USER: ${ZOOKEEPER_USER}
+      KAFKA_ZOOKEEPER_PASSWORD: ${ZOOKEEPER_PASSWORD}
+      JMX_PORT: 9992
+      # TODO JMX
+      KAFKA_OPTS: -Djava.rmi.server.hostname=${KAFKA_HOSTNAME}
+
   kafka2:
-    image: wurstmeister/kafka
-    depends_on:
-      - zookeeper
+    image: 'bitnami/kafka:${KAFKA_VERSION}'
     ports:
       - "9093:9093"
+      - "9993:9993"
+    restart: always
     volumes:
-      - ./data/kafka/node_2/data:/kafka
+      - ./data/kafka/node_2/data:/bitnami/kafka
+    depends_on:
+      - zookeeper
     environment:
       KAFKA_BROKER_ID: 2
-      KAFKA_LISTENERS: INSIDE://:19093,OUTSIDE://:9093
-      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka2:19093,OUTSIDE://${KAFKA_HOSTNAME}:9093
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      JMX_PORT: 9999
-    restart: always
+      KAFKA_CFG_LISTENERS: INSIDE://:19093,OUTSIDE://:9093
+      KAFKA_CFG_ADVERTISED_LISTENERS: INSIDE://kafka2:19093,OUTSIDE://${KAFKA_HOSTNAME}:9093
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INSIDE
+      ALLOW_PLAINTEXT_LISTENER: yes
+      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ZOOKEEPER_PROTOCOL: SASL
+      KAFKA_ZOOKEEPER_USER: ${ZOOKEEPER_USER}
+      KAFKA_ZOOKEEPER_PASSWORD: ${ZOOKEEPER_PASSWORD}
+      JMX_PORT: 9993
+      KAFKA_OPTS: -Djava.rmi.server.hostname=${KAFKA_HOSTNAME}
+
   kafka3:
-    image: wurstmeister/kafka
-    depends_on:
-      - zookeeper
+    image: 'bitnami/kafka:${KAFKA_VERSION}'
     ports:
       - "9094:9094"
-    volumes:
-      - ./data/kafka/node_3/data:/kafka
-    environment:
-      KAFKA_BROKER_ID: 3
-      KAFKA_LISTENERS: INSIDE://:19094,OUTSIDE://:9094
-      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka3:19094,OUTSIDE://${KAFKA_HOSTNAME}:9094
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      JMX_PORT: 9999
+      - "9994:9994"
     restart: always
-
-  kafka-manager: 
-    image: kafkamanager/kafka-manager
-    ports:
-      - 9000:9000
-    environment:
-      ZK_HOSTS: "zookeeper:2181"  
+    volumes:
+      - ./data/kafka/node_3/data:/bitnami/kafka
     depends_on:
       - zookeeper
-      - kafka1
-      - kafka2
-      - kafka3
-    restart: always
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_CFG_LISTENERS: INSIDE://:19094,OUTSIDE://:9094
+      KAFKA_CFG_ADVERTISED_LISTENERS: INSIDE://kafka3:19094,OUTSIDE://${KAFKA_HOSTNAME}:9094
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INSIDE
+      ALLOW_PLAINTEXT_LISTENER: yes
+      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ZOOKEEPER_PROTOCOL: SASL
+      KAFKA_ZOOKEEPER_USER: ${ZOOKEEPER_USER}
+      KAFKA_ZOOKEEPER_PASSWORD: ${ZOOKEEPER_PASSWORD}
+      JMX_PORT: 9994
+      KAFKA_OPTS: -Djava.rmi.server.hostname=${KAFKA_HOSTNAME}
