@@ -13,9 +13,9 @@ services:
     - TZ=Asia/Shanghai
     - MYSQL_ROOT_PASSWORD=123456
     volumes:
-        # win 直接映射 my.cnf会导致 无法连接,无法启动等错误, 原因是mysql忽略了权限过高的配置文件, 而 win 下映射的文件权限都是777
-        # win 直接映射 /etc/mysql/conf.d 具有同样的问题, 不加 skip-host-cache, skip-name-resolve 这两个配置mysql会检查连接用户的地址, 
-        # 到导致无法连接, 默认创建的 root 用户 绑定的是 localhost 
-        - ./data/mysql/data:/var/lib/mysql
+      # win 直接映射 my.cnf会导致 无法连接,无法启动等错误, 原因是mysql忽略了权限过高的配置文件, 而 win 下映射的文件权限都是777
+      # win 直接映射 /etc/mysql/conf.d 具有同样的问题, 不加 skip-host-cache, skip-name-resolve 这两个配置mysql会检查连接用户的地址, 
+      # 到导致无法连接, 默认创建的 root 用户 绑定的是 localhost 
+      - ./data/mysql/data:/var/lib/mysql
     ports:
-        - "3306:3306"
+      - "3306:3306"
