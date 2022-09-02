@@ -19,7 +19,7 @@ services:
     ports:
       - "9092:9092"
       - "9992:9992"
-      - "19092:19092"
+      # - "19092:19092"
     restart: always
     volumes:
       - ./data/kafka/node_1/data:/bitnami/kafka
@@ -45,7 +45,7 @@ services:
     ports:
       - "9093:9093"
       - "9993:9993"
-      - "19093:19093"
+      # - "19093:19093"
     restart: always
     volumes:
       - ./data/kafka/node_2/data:/bitnami/kafka
@@ -70,7 +70,7 @@ services:
     ports:
       - "9094:9094"
       - "9994:9994"
-      - "19094:19094"
+      # - "19094:19094"
     restart: always
     volumes:
       - ./data/kafka/node_3/data:/bitnami/kafka
