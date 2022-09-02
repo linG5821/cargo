@@ -1,0 +1,72 @@
+version: '3'
+
+services:
+  kafka1:
+    image: 'bitnami/kafka:${KAFKA3_VERSION}'
+    ports:
+      - "9092:9092"
+      - "9992:9992"
+    restart: always
+    volumes:
+      - ./data/kafka3/node_1/data:/bitnami/kafka
+    environment:
+      KAFKA_ENABLE_KRAFT: yes
+      KAFKA_KRAFT_CLUSTER_ID: DbkQd3ClSqeQdLr_maMoTg
+      KAFKA_CFG_PROCESS_ROLES: broker,controller
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka1:9192,2@kafka2:9193,3@kafka3:9194
+      KAFKA_BROKER_ID: 1
+      KAFKA_CFG_LISTENERS: CONTROLLER://:9192,INSIDE://:19092,OUTSIDE://:9092
+      KAFKA_CFG_ADVERTISED_LISTENERS: INSIDE://kafka1:19092,OUTSIDE://${KAFKA_HOSTNAME}:9092
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INSIDE
+      ALLOW_PLAINTEXT_LISTENER: yes
+      JMX_PORT: 9992
+      KAFKA_JMX_OPTS: -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.rmi.port=9992 -Djava.rmi.server.hostname=${KAFKA_HOSTNAME}
+
+
+  kafka2:
+    image: 'bitnami/kafka:${KAFKA3_VERSION}'
+    ports:
+      - "9093:9093"
+      - "9993:9993"
+    restart: always
+    volumes:
+      - ./data/kafka3/node_2/data:/bitnami/kafka
+    environment:
+      KAFKA_ENABLE_KRAFT: yes
+      KAFKA_KRAFT_CLUSTER_ID: DbkQd3ClSqeQdLr_maMoTg
+      KAFKA_CFG_PROCESS_ROLES: broker,controller
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka1:9192,2@kafka2:9193,3@kafka3:9194
+      KAFKA_BROKER_ID: 2
+      KAFKA_CFG_LISTENERS: CONTROLLER://:9193,INSIDE://:19093,OUTSIDE://:9093
+      KAFKA_CFG_ADVERTISED_LISTENERS: INSIDE://kafka2:19093,OUTSIDE://${KAFKA_HOSTNAME}:9093
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INSIDE
+      ALLOW_PLAINTEXT_LISTENER: yes
+      JMX_PORT: 9993
+      KAFKA_JMX_OPTS: -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.rmi.port=9993 -Djava.rmi.server.hostname=${KAFKA_HOSTNAME}
+
+  kafka3:
+    image: 'bitnami/kafka:${KAFKA3_VERSION}'
+    ports:
+      - "9094:9094"
+      - "9994:9994"
+    restart: always
+    volumes:
+      - ./data/kafka3/node_3/data:/bitnami/kafka
+    environment:
+      KAFKA_ENABLE_KRAFT: yes
+      KAFKA_KRAFT_CLUSTER_ID: DbkQd3ClSqeQdLr_maMoTg
+      KAFKA_CFG_PROCESS_ROLES: broker,controller
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka1:9192,2@kafka2:9193,3@kafka3:9194
+      KAFKA_BROKER_ID: 3
+      KAFKA_CFG_LISTENERS: CONTROLLER://:9194,INSIDE://:19094,OUTSIDE://:9094
+      KAFKA_CFG_ADVERTISED_LISTENERS: INSIDE://kafka3:19094,OUTSIDE://${KAFKA_HOSTNAME}:9094
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: INSIDE
+      ALLOW_PLAINTEXT_LISTENER: yes
+      JMX_PORT: 9994
+      KAFKA_JMX_OPTS: -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.rmi.port=9994 -Djava.rmi.server.hostname=${KAFKA_HOSTNAME}
