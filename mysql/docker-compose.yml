@@ -17,5 +17,6 @@ services:
       # win 直接映射 /etc/mysql/conf.d 具有同样的问题, 不加 skip-host-cache, skip-name-resolve 这两个配置mysql会检查连接用户的地址, 
       # 到导致无法连接, 默认创建的 root 用户 绑定的是 localhost 
       - ./data/mysql/data:/var/lib/mysql
+      - ./conf.d/:/etc/mysql/conf.d:ro
     ports:
       - "3306:3306"
