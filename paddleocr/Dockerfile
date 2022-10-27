@@ -1,7 +1,6 @@
-FROM registry.baidubce.com/paddlepaddle/serving:0.9.0-cuda11.2-cudnn8-runtime
+FROM registry.baidubce.com/paddlepaddle/serving:0.9.0-runtime
 
-COPY PaddleOCR/deploy/pdserving/ /deploy
-COPY PaddleOCR/requirements.txt /deploy
+COPY ./PaddleOCR /deploy
 WORKDIR /deploy
 
 RUN pip config set global.index-url https://mirror.baidu.com/pypi/simple \
@@ -23,5 +22,4 @@ RUN python3.6 -m paddle_serving_client.convert --dirname ./ch_PP-OCRv3_det_infer
   --serving_server ./ppocr_rec_v3_serving/  \
   --serving_client ./ppocr_rec_v3_client/
 
-# ENTRYPOINT ["python3.6", "web_service.py", "--config=config.yml"]
-ENTRYPOINT ["bash"]
+ENTRYPOINT ["python3.6", "deploy/pdserving/web_service.py", "--config=deploy/pdserving/config.yml"]
