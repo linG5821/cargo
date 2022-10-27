@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  paddleocr:
+    build: .
+    container_name: paddleocr
+    restart: always
+    stdin_open: true
+    tty: true
+    ports:
+      - "18091:18091"
+      - "9998:9998"
