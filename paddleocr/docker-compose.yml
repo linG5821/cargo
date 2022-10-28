@@ -5,6 +5,9 @@ services:
     build: .
     container_name: paddleocr
     restart: always
+    environment:
+      - LANG=C.UTF-8
+      - LC_ALL=C.UTF-8
     ports:
       - "18091:18091"
       - "9998:9998"
