@@ -49,6 +49,8 @@ services:
       - ./data/es-cluster/node2/data:/usr/share/elasticsearch/data
       - ./data/es-cluster/node2/logs:/usr/share/elasticsearch/logs
       - ./data/es-cluster/plugins:/usr/share/elasticsearch/plugins
+    ports:
+      - 9300:9200
   elasticsearch3:
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTICSEARCH_VERSION}
     container_name: elasticsearch3
@@ -67,5 +69,7 @@ services:
       - ./data/es-cluster/node3/data:/usr/share/elasticsearch/data
       - ./data/es-cluster/node3/logs:/usr/share/elasticsearch/logs
       - ./data/es-cluster/plugins:/usr/share/elasticsearch/plugins
+    ports:
+      - 9400:9200
 
  
