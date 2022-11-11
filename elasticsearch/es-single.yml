@@ -6,6 +6,8 @@ services:
     container_name: kibana
     environment:
       ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+      ELASTICSEARCH_USERNAME: elastic
+      ELASTICSEARCH_PASSWORD: elastic
       I18N_LOCALE: zh-CN
     # volumes:
     #     - ../data/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
@@ -16,6 +18,8 @@ services:
     container_name: elasticsearch
     environment:
       - discovery.type=single-node
+      - xpack.security.enabled=true
+      - xpack.security.transport.ssl.enabled=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
       memlock:
