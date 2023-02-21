@@ -5,7 +5,8 @@ services:
     image: emqx/neuronex:latest
     container_name: neuronex
     ports:
-    - "7000:7000"
+      - "7000:7000"
+      - "1502:502"
     restart: always
     privileged: true
     volumes:
