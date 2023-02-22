@@ -1,0 +1,36 @@
+version: "3.8"
+
+networks:
+  iotdb:
+    external: true
+
+services:
+  backend:
+    image: apache/iotdb-web-workbench:0.13.0-backend
+    restart: always
+    volumes:
+      - ./data/backend/iotdb.db:/data/iotdb.db #数据库挂载前面为本地路径
+      - ./data/backend/workbench-1.0.0.jar:/app/app.jar
+    working_dir: /app
+    environment:
+      JAVA_MEM_OPTS: "-Xmx1024m -Xms1024m -Dspring.datasource.url=jdbc:sqlite:/data/iotdb.db"
+    entrypoint: 
+      - sh 
+      - -c 
+      - exec java $${JAVA_MEM_OPTS} -jar /app/app.jar
+    networks:
+      iotdb: 
+          ipv4_address: 172.25.0.10
+      default:
+
+  frontend:
+    image: apache/iotdb-web-workbench:0.13.0-frontend
+    restart: always
+    ports:
+      - 7666:80  #访问端口
+    environment:
+      - BACKEND_ADDRESS=backend:9090  #后端启动端口
+    volumes:
+      - ./data/frontend/dist:/usr/share/nginx/html
+    depends_on:
+      - backend
