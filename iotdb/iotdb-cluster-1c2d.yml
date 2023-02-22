@@ -1,0 +1,53 @@
+version: "3"
+services:
+  iodb-confignode:
+    image: apache/iotdb:1.0.0-confignode
+    hostname: iotdb-confignode
+    container_name: iotdb-confignode
+    environment:
+      - cn_internal_address=iotdb-confignode
+      - cn_target_config_node_list=iotdb-confignode:22277
+    volumes:
+        - ./data/cluster/confignode/data:/iotdb/data
+        - ./data/cluster/confignode/logs:/iotdb/logs
+    networks:
+      iotdb:
+        ipv4_address: 172.25.0.2
+
+  iotdb-datanode1:
+    image: apache/iotdb:1.0.0-datanode
+    hostname: iotdb-datanode-1
+    container_name: iotdb-datanode-1
+    ports:
+      - "6667:6667"
+    environment:
+      - dn_rpc_address=iotdb-datanode-1
+      - dn_internal_address=iotdb-datanode-1
+      - dn_target_config_node_list=iotdb-confignode:22277
+    volumes:
+      - ./data/cluster/datanode1/data:/iotdb/data/
+      - ./data/cluster/datanode1/logs:/iotdb/logs/
+    networks:
+      iotdb:
+        ipv4_address: 172.25.0.3
+
+  iotdb-datanode2:
+    image: apache/iotdb:1.0.0-datanode
+    hostname: iotdb-datanode-2
+    container_name: iotdb-datanode-2
+    ports:
+      - "6668:6667"
+    environment:
+      - dn_rpc_address=iotdb-datanode-2
+      - dn_internal_address=iotdb-datanode-2
+      - dn_target_config_node_list=iotdb-confignode:22277
+    volumes:
+      - ./data/cluster/datanode2/data:/iotdb/data/
+      - ./data/cluster/datanode2/logs:/iotdb/logs/
+    networks:
+      iotdb:
+        ipv4_address: 172.25.0.4
+
+networks:
+  iotdb:
+    external: true
