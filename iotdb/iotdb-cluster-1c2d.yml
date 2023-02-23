@@ -21,7 +21,8 @@ services:
     ports:
       - "6667:6667"
     environment:
-      - dn_rpc_address=iotdb-datanode-1
+      - dn_rpc_address=0.0.0.0
+      # - dn_rpc_address=iotdb-datanode-1
       - dn_internal_address=iotdb-datanode-1
       - dn_target_config_node_list=iotdb-confignode:22277
     volumes:
@@ -36,9 +37,11 @@ services:
     hostname: iotdb-datanode-2
     container_name: iotdb-datanode-2
     ports:
-      - "6668:6667"
+      - "6668:6668"
     environment:
-      - dn_rpc_address=iotdb-datanode-2
+      - dn_rpc_address=0.0.0.0
+      # - dn_rpc_address=iotdb-datanode-2
+      - dn_rpc_port=6668
       - dn_internal_address=iotdb-datanode-2
       - dn_target_config_node_list=iotdb-confignode:22277
     volumes:
