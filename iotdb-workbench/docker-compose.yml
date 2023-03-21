@@ -10,7 +10,7 @@ services:
     restart: always
     volumes:
       - ./data/backend/iotdb.db:/data/iotdb.db #数据库挂载前面为本地路径
-      - ./data/backend/workbench-1.0.0.jar:/app/app.jar
+      - ./data/backend/workbench.jar:/app/app.jar
     working_dir: /app
     environment:
       JAVA_MEM_OPTS: "-Xmx1024m -Xms1024m -Dspring.datasource.url=jdbc:sqlite:/data/iotdb.db"

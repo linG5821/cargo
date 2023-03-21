@@ -9,7 +9,7 @@ services:
     environment:
       - cn_internal_address=iotdb-standalone
       - cn_target_config_node_list=iotdb-standalone:22277
-      - dn_rpc_address=iotdb-standalone
+      - dn_rpc_address=0.0.0.0
       - dn_target_config_node_list=iotdb-standalone:22277
     volumes:
         - ./data/standalone/data:/iotdb/data
