@@ -15,7 +15,8 @@ services:
       - ./data/backend/workbench.jar:/app/app.jar
     working_dir: /app
     environment:
-      JAVA_MEM_OPTS: "-Xmx1024m -Xms1024m -Dspring.datasource.url=jdbc:sqlite:/data/iotdb.db"
+      JAVA_MEM_OPTS: "-Xmx512m -Xms512m -Dspring.datasource.url=jdbc:sqlite:/data/iotdb.db"
+      TZ: Asia/Shanghai
     entrypoint: 
       - sh 
       - -c 
