@@ -4,6 +4,7 @@ services:
     image: apache/iotdb:1.0.0-standalone
     hostname: iotdb-standalone
     container_name: iotdb-standalone
+    restart: always
     ports:
       - "6667:6667"
     environment:
