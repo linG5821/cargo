@@ -6,21 +6,16 @@ networks:
 
 services:
   backend:
-    image: apache/iotdb-web-workbench:0.13.0-backend
+    build: .
     restart: always
     ports:
       - 7665:9090  #访问端口
     volumes:
       - ./data/backend/iotdb.db:/data/iotdb.db #数据库挂载前面为本地路径
-      - ./data/backend/workbench.jar:/app/app.jar
     working_dir: /app
     environment:
-      JAVA_MEM_OPTS: "-Xmx512m -Xms512m -Dspring.datasource.url=jdbc:sqlite:/data/iotdb.db"
+      spring.datasource.url: jdbc:sqlite:/data/iotdb.db
       TZ: Asia/Shanghai
-    entrypoint: 
-      - sh 
-      - -c 
-      - exec java $${JAVA_MEM_OPTS} -jar /app/app.jar
     networks:
       iotdb: 
           ipv4_address: 172.25.0.10
