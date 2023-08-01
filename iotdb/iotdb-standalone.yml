@@ -6,7 +6,7 @@ services:
     container_name: iotdb-standalone
     restart: always
     ports:
-      - "6668:6667"
+      - "6667:6667"
     environment:
       - cn_internal_address=iotdb-standalone
       - cn_internal_port=22277
