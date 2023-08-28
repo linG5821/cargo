@@ -1,6 +1,17 @@
 version: '3.8'
 
 services:
+  logstash:  
+    image: docker.elastic.co/logstash/logstash:${LOGSTASH_VERSION}
+    container_name: logstash
+    volumes:
+      - ./conf/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./conf/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    ports:
+      - 5044:5044
+      - 4560:4560
+    depends_on:
+      - elasticsearch
   kibana:
     image: docker.elastic.co/kibana/kibana:${KIBANA_VERSION}
     container_name: kibana
@@ -10,9 +21,11 @@ services:
       ELASTICSEARCH_PASSWORD: elastic
       I18N_LOCALE: zh-CN
     # volumes:
-    #     - ../data/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+    #     - ./data/es-single/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
     ports:
       - 5601:5601
+    depends_on:
+      - elasticsearch
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTICSEARCH_VERSION}
     container_name: elasticsearch
