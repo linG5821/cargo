@@ -1,0 +1,10 @@
+version: "3.8"
+
+
+services:
+  backend:
+    image: excalidraw/excalidraw
+    container_name: excalidraw
+    restart: always
+    ports:
+      - 9888:80  #访问端口
