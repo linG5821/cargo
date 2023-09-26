@@ -5,7 +5,7 @@ networks:
 services:
   # Start zookeeper
   zookeeper:
-    image: apachepulsar/pulsar:latest
+    image: apachepulsar/pulsar:${PULSAR_VERSION}
     container_name: zookeeper
     restart: on-failure
     networks:
@@ -27,9 +27,9 @@ services:
 
   # Init cluster metadata
   pulsar-init:
+    image: apachepulsar/pulsar:${PULSAR_VERSION}
     container_name: pulsar-init
     hostname: pulsar-init
-    image: apachepulsar/pulsar:latest
     networks:
       - pulsar
     command: >
@@ -45,7 +45,7 @@ services:
 
   # Start bookie
   bookie:
-    image: apachepulsar/pulsar:latest
+    image: apachepulsar/pulsar:${PULSAR_VERSION}
     container_name: bookie
     restart: on-failure
     networks:
@@ -70,7 +70,7 @@ services:
 
   # Start broker
   broker:
-    image: apachepulsar/pulsar:latest
+    image: apachepulsar/pulsar:${PULSAR_VERSION}
     container_name: broker
     hostname: broker
     restart: on-failure
@@ -96,7 +96,7 @@ services:
       - "6658:8080"
     command: bash -c "bin/apply-config-from-env.py conf/broker.conf && exec bin/pulsar broker"
   pulsar-manager:
-    image: apachepulsar/pulsar-manager:latest
+    image: apachepulsar/pulsar-manager:${PULSAR_MANAGER}
     environment:
       - SPRING_CONFIGURATION_FILE=/pulsar-manager/pulsar-manager/application.properties
     ports:
