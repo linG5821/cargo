@@ -29,6 +29,8 @@ services:
       ## - dn_schema_region_consensus_port=10750
       ## - dn_data_region_consensus_port=10760
       - dn_target_config_node_list=iotdb-standalone:22277
+      - dn_metric_reporter_list=IOTDB
+      - dn_metric_internal_reporter_type=IOTDB
     volumes:
         - ./data/standalone/data:/iotdb/data
         - ./data/standalone/logs:/iotdb/logs
