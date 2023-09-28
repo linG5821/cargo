@@ -7,7 +7,7 @@ curl \
    -H 'Cookie: XSRF-TOKEN=$CSRF_TOKEN;' \
    -H "Content-Type: application/json" \
    -X PUT http://localhost:7750/pulsar-manager/users/superuser \
-   -d '{"name": "admin", "password": "apachepulsar", "description": "admin", "email": "admin@pulsar.org"}'
+   -d '{"name": "admin", "password": "pulsar", "description": "admin", "email": "admin@pulsar.org"}'
 ```
 
 ### 添加环境
