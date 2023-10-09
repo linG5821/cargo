@@ -37,6 +37,11 @@ services:
     networks:
       iotdb:
         ipv4_address: 172.25.0.6
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100M"
+        max-file: "10"
 
 networks:
   iotdb:
