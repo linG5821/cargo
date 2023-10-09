@@ -104,7 +104,8 @@ services:
       - ./data/pulsar-manager/dbdata:/pulsar-manager/pulsar-manager/dbdata
     ports:
       - "9527:9527"
-      - "7750:7750"
+      ## pulsar-manager 后端端口
+      # - "7750:7750"
     networks:
       - pulsar
     
