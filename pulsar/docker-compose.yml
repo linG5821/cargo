@@ -86,6 +86,7 @@ services:
       ## 官网不建议和 advertisedListeners 一起配置
       # - advertisedAddress=broker
       - advertisedListeners=external:pulsar://${PULSAR_LISTENER_HOST}:6650
+      - transactionCoordinatorEnabled=true
       - PULSAR_MEM=-Xms512m -Xmx512m -XX:MaxDirectMemorySize=256m
     depends_on:
       zookeeper:
