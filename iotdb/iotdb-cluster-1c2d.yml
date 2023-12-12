@@ -1,12 +1,20 @@
 version: "3"
 services:
   iodb-confignode:
-    image: apache/iotdb:1.0.0-confignode
+    image: apache/iotdb:1.1.2-confignode
     hostname: iotdb-confignode
     container_name: iotdb-confignode
+    restart: always
     environment:
       - cn_internal_address=iotdb-confignode
-      - cn_target_config_node_list=iotdb-confignode:22277
+      - cn_target_config_node_list=iotdb-confignode:10710
+      - schema_replication_factor=3
+      - cn_internal_port=10710
+      - cn_consensus_port=10720
+      - schema_region_consensus_protocol_class=org.apache.iotdb.consensus.ratis.RatisConsensus
+      - config_node_consensus_protocol_class=org.apache.iotdb.consensus.ratis.RatisConsensus
+      - data_replication_factor=3
+      - data_region_consensus_protocol_class=org.apache.iotdb.consensus.iot.IoTConsensus
     volumes:
         - ./data/cluster/confignode/data:/iotdb/data
         - ./data/cluster/confignode/logs:/iotdb/logs
@@ -15,16 +23,25 @@ services:
         ipv4_address: 172.25.0.2
 
   iotdb-datanode1:
-    image: apache/iotdb:1.0.0-datanode
+    image: apache/iotdb:1.1.2-datanode
     hostname: iotdb-datanode-1
     container_name: iotdb-datanode-1
+    restart: always
     ports:
       - "6667:6667"
     environment:
       - dn_rpc_address=0.0.0.0
-      # - dn_rpc_address=iotdb-datanode-1
+      - dn_rpc_port=6667
       - dn_internal_address=iotdb-datanode-1
-      - dn_target_config_node_list=iotdb-confignode:22277
+      - dn_target_config_node_list=iotdb-confignode:10710
+      - data_replication_factor=3
+      - dn_mpp_data_exchange_port=10740
+      - dn_schema_region_consensus_port=10750
+      - dn_data_region_consensus_port=10760
+      - data_region_consensus_protocol_class=org.apache.iotdb.consensus.iot.IoTConsensus
+      - schema_replication_factor=3
+      - schema_region_consensus_protocol_class=org.apache.iotdb.consensus.ratis.RatisConsensus
+      - config_node_consensus_protocol_class=org.apache.iotdb.consensus.ratis.RatisConsensus
     volumes:
       - ./data/cluster/datanode1/data:/iotdb/data/
       - ./data/cluster/datanode1/logs:/iotdb/logs/
@@ -33,17 +50,25 @@ services:
         ipv4_address: 172.25.0.3
 
   iotdb-datanode2:
-    image: apache/iotdb:1.0.0-datanode
+    image: apache/iotdb:1.1.2-datanode
     hostname: iotdb-datanode-2
     container_name: iotdb-datanode-2
+    restart: always
     ports:
       - "6668:6668"
     environment:
       - dn_rpc_address=0.0.0.0
-      # - dn_rpc_address=iotdb-datanode-2
       - dn_rpc_port=6668
       - dn_internal_address=iotdb-datanode-2
-      - dn_target_config_node_list=iotdb-confignode:22277
+      - dn_target_config_node_list=iotdb-confignode:10710
+      - data_replication_factor=3
+      - dn_mpp_data_exchange_port=10740
+      - dn_schema_region_consensus_port=10750
+      - dn_data_region_consensus_port=10760
+      - data_region_consensus_protocol_class=org.apache.iotdb.consensus.iot.IoTConsensus
+      - schema_replication_factor=3
+      - schema_region_consensus_protocol_class=org.apache.iotdb.consensus.ratis.RatisConsensus
+      - config_node_consensus_protocol_class=org.apache.iotdb.consensus.ratis.RatisConsensus
     volumes:
       - ./data/cluster/datanode2/data:/iotdb/data/
       - ./data/cluster/datanode2/logs:/iotdb/logs/

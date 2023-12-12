@@ -1,0 +1,21 @@
+version: '3'
+networks:
+  pulsar:
+    name: pulsar_pulsar
+    external: true
+services:
+  pulsar-manager:
+    image: apachepulsar/pulsar-manager:${PULSAR_MANAGER}
+    restart: always
+    environment:
+      - SPRING_CONFIGURATION_FILE=/pulsar-manager/pulsar-manager/application.properties
+    volumes:
+      - ./conf/pulsar-manager/application.properties:/pulsar-manager/pulsar-manager/application.properties
+      - ./data/pulsar-manager/dbdata:/pulsar-manager/pulsar-manager/dbdata
+    ports:
+      - "9527:9527"
+      ## pulsar-manager 后端端口
+      # - "7750:7750"
+    networks:
+      - pulsar
+    

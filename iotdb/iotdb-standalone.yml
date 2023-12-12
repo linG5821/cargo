@@ -1,22 +1,47 @@
 version: "3"
 services:
   iotdb-standalone:
-    image: apache/iotdb:1.0.0-standalone
+    image: apache/iotdb:1.1.2-standalone
     hostname: iotdb-standalone
     container_name: iotdb-standalone
+    restart: always
     ports:
       - "6667:6667"
     environment:
       - cn_internal_address=iotdb-standalone
+      - cn_internal_port=22277
+      - cn_consensus_port=22278
+      ## 新版本默认配置
+      ## - cn_internal_port=10710
+      ## - cn_consensus_port=10720
       - cn_target_config_node_list=iotdb-standalone:22277
       - dn_rpc_address=0.0.0.0
+      ## 旧版本端口通过 TDataNodeLocation 关键字在log_confignode_all.log 中搜索
+      - dn_rpc_port=6667
+      - dn_internal_port=9003
+      - dn_mpp_data_exchange_port=8777
+      - dn_schema_region_consensus_port=50010
+      - dn_data_region_consensus_port=40010
+      ## 新版本默认配置
+      ## - dn_rpc_port=6667
+      ## - dn_internal_port
+      ## - dn_mpp_data_exchange_port=10740
+      ## - dn_schema_region_consensus_port=10750
+      ## - dn_data_region_consensus_port=10760
       - dn_target_config_node_list=iotdb-standalone:22277
+      - dn_metric_reporter_list=IOTDB
+      - dn_metric_internal_reporter_type=IOTDB
     volumes:
         - ./data/standalone/data:/iotdb/data
         - ./data/standalone/logs:/iotdb/logs
     networks:
       iotdb:
         ipv4_address: 172.25.0.6
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100M"
+        max-file: "10"
 
 networks:
   iotdb:
