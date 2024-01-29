@@ -4,8 +4,8 @@ ENV JAVA_OPTS="-Xmx1024m -Xms1024m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=2
 
 RUN mkdir /data
 
-COPY data/backend/workbench.jar /app/app.jar
-COPY data/backend/iotdb.db /data/iotdb.db
+COPY ./backend/workbench.jar /app/app.jar
+COPY ./backend/iotdb.db /data/iotdb.db
 
 WORKDIR /app
 

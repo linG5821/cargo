@@ -6,12 +6,13 @@ networks:
 
 services:
   backend:
-    build: .
+    build: 
+      context: .
     restart: always
     ports:
       - 7665:9090  #访问端口
-    volumes:
-      - ./data/backend/iotdb.db:/data/iotdb.db #数据库挂载前面为本地路径
+    # volumes:
+    #   - ./backend/iotdb.db:/data/iotdb.db #数据库挂载前面为本地路径
     working_dir: /app
     environment:
       spring.datasource.url: jdbc:sqlite:/data/iotdb.db
