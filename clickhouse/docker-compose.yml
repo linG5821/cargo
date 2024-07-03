@@ -1,0 +1,16 @@
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server:22.6.9
+    container_name: clickhouse
+    restart: always
+    privileged: true
+    environment:
+      - TZ=Asia/Shanghai
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    volumes:
+      # 运行日志
+      - ./data/log:/var/log/clickhouse-server
+      # 数据持久, 映射到windows会出现无权限写入的问题，暂未解决
+      # - ./data/data:/var/lib/clickhouse
