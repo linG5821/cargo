@@ -1,0 +1,2 @@
+iotdb-workbench/backend/iotdb.db filter=lfs diff=lfs merge=lfs -text
+iotdb-workbench/backend/workbench.jar filter=lfs diff=lfs merge=lfs -text
